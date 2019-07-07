@@ -4,11 +4,12 @@ require 'pry'
 
 
 
-
-
-def get_character_movies_from_api(character_name)
+def make_request
   response_string = RestClient.get('http://www.swapi.co/api/people/')
   response_hash = JSON.parse(response_string)
+end
+
+def make_url_array(response_hash, character_name)
   url_array = []
   
   response_hash["results"].each do |char_hash|
@@ -19,7 +20,25 @@ def get_character_movies_from_api(character_name)
       end
     end
   end
+  url_array
+end
+
+def get_character_movies_from_api(character_name)
+  # response_string = RestClient.get('http://www.swapi.co/api/people/')
+  # response_hash = JSON.parse(response_string)
+  # url_array = []
   
+  # response_hash["results"].each do |char_hash|
+  #   char_hash.each do |key, value|
+  #     if key == "name" && value.downcase == character_name.downcase
+  #       url_array << char_hash["films"]
+  #       url_array = url_array.flatten
+  #     end
+  #   end
+  # end
+  
+  url_array = make_url_array(make_request,character_name)
+
   film_info_array = []
 
   url_array.each do |url|
